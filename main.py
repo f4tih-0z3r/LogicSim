@@ -48,6 +48,60 @@ def main():
 
             self.bgColor = (40, 40, 40)
 
+            self.cableActiveColor = (255, 0, 0)
+            self.cablePassiveColor = (135, 0, 0)
+
+    #Defining colors
+    color = colorClass()
+
+    class cableClass:
+        def __init__(self, activeColor = None, passiveColor = None):
+            #When activeColor not entered manually
+            if activeColor == None:
+                self.activeColor = color.cableActiveColor
+
+            #When activeColor entered manually
+            else:
+                #Checking validity of activeColor
+                if type(activeColor) == tuple:
+                    if len(activeColor) == 3:
+                        for val in activeColor:
+                            if type(val) == int:
+                                if not (val <= 255 and val >= 1):
+                                    raise errors.invalidColorError()
+                            else:
+                                raise errors.invalidColorError()
+                    else:
+                        raise errors.invalidColorError()
+                else:
+                    raise errors.invalidColorError()
+
+                #When activeColor is valid
+                self.activeColor = activeColor
+
+            #When passiveColor not entered manually
+            if passiveColor == None:
+                self.passiveColor = color.cablePassiveColor
+
+            #When passiveColor entered manually:
+            else:
+                #Checking validity of passiveColor
+                if type(passiveColor) == tuple:
+                    if len(passiveColor) == 3:
+                        for val in passiveColor:
+                            if type(val) == int:
+                                if not (val <= 255 and val >= 1):
+                                    raise errors.invalidColorError()
+                            else:
+                                raise errors.invalidColorError()
+                    else:
+                        raise errors.invalidColorError()
+                else:
+                    raise errors.invalidColorError()
+
+                #When passiveColor is valid
+                self.passiveColor = passiveColor
+
     class applClass:
         def __init__(self, screenSize = None):
             #When screenSize not entered manually
@@ -55,8 +109,8 @@ def main():
                 self.screenSize = (1200, 600)
 
             #When screenSize entered manually
-            #Checking validity of screenSize
             else:
+                #Checking validity of screenSize
                 if type(screenSize) == tuple:
                     if len(screenSize) == 2:
                         for val in screenSize:
@@ -78,9 +132,6 @@ def main():
 
         #Main running function
         def run(self):
-            #Defining colors
-            color = colorClass()
-
             #Defining pygame surface(window)
             pygame.init()
             surface = pygame.display.set_mode(self.screenSize)
