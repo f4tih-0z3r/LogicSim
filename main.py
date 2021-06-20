@@ -102,6 +102,35 @@ def main():
                 #When passiveColor is valid
                 self.passiveColor = passiveColor
 
+            self.parts = []
+
+        def addPart(self, pos1, pos2):
+            #Checking validity of pos1
+            if type(pos1) == tuple:
+                if len(pos1) == 2:
+                    for val in pos1:
+                        if not (type(val) == int):
+                            raise errors.invalidPosError()
+                else:
+                    raise errors.invalidPosError()
+            else:
+                raise errors.invalidPosError()
+
+            #When pos1 is valid
+            #Checking validity of pos2
+            if type(pos2) == tuple:
+                if len(pos2) == 2:
+                    for val in pos2:
+                        if not (type(val) == int):
+                            raise errors.invalidPosError()
+                else:
+                    raise errors.invalidPosError()
+            else:
+                raise errors.invalidPosError()
+
+            #When pos2 is valid
+            self.parts.append([pos1, pos2])
+
     class applClass:
         def __init__(self, screenSize = None):
             #When screenSize not entered manually

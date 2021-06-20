@@ -17,3 +17,8 @@ class invalidColorError(Exception):
     def __init__(self):
         self.msg = "Color must be tuple type, it must contains 3 elements, the type of all elements must be int, all elements must be in range of (0, 255)"
         super().__init__(self.msg)
+
+class invalidPosError(Exception):
+    def __init__(self):
+        self.msg = "asd"
+        super().__init__(self.msg)
