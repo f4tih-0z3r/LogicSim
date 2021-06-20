@@ -1,5 +1,6 @@
 import errors
 from termcolor import colored
+import pygame
 
 def main():
     class debugClass:
@@ -36,6 +37,16 @@ def main():
             elif debugLevel == 4: #Error
                 print(colored(msg, "white", "on_red"))
 
+    class colorClass:
+        def __init__(self):
+            self.black = (0, 0, 0)
+            self.white = (255, 255, 255)
+            
+            self.red = (255, 0, 0)
+            self.green = (0, 255, 0)
+            self.blue = (0, 0, 255)
+
+            self.bgColor = (40, 40, 40)
 
     class applClass:
         def __init__(self, screenSize = None):
@@ -65,5 +76,34 @@ def main():
                 #When screenSize is valid
                 self.screenSize = screenSize
 
+        #Main running function
+        def run(self):
+            #Defining colors
+            color = colorClass()
+
+            #Defining pygame surface(window)
+            pygame.init()
+            surface = pygame.display.set_mode(self.screenSize)
+            pygame.display.set_caption("LogicSim")
+
+            running = True
+
+            #Main surface loop
+            while running:
+                #Pygame event control
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+
+                #Things to do
+                surface.fill(color.bgColor)
+
+                pygame.display.flip()
+
+    #Application starter
+    appl = applClass((1200, 600))
+    appl.run()
+
+#Main python starter
 if __name__ == "__main__":
     main()
