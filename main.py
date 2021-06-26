@@ -251,12 +251,6 @@ def main():
             #Defining color class
             color = colorClass()
 
-            self.addCable()
-            self.addCable()
-            self.addCable()
-
-            self.addCablePart(1, (10, 20), (30, 40))
-
             running = True
 
             #Main surface loop
@@ -268,11 +262,6 @@ def main():
 
                 #Things to do
                 surface.fill(color.bgColor)
-
-                print("-----")
-                for cable in self.cables:
-                    print(cable.parts)
-                    print("---")
 
                 pygame.display.flip()
 
