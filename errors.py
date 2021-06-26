@@ -22,3 +22,13 @@ class invalidPosError(Exception):
     def __init__(self):
         self.msg = "asd"
         super().__init__(self.msg)
+
+class invalidCableIdError(Exception):
+    def __init__(self):
+        self.msg = "Cable id must be int type"
+        super().__init__(self.msg)
+
+class cableIdNotFoundError(Exception):
+    def __init__(self):
+        self.msg = "asd"
+        super().__init__(self.msg)
