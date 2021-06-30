@@ -114,6 +114,7 @@ def main():
                 self.passiveColor = passiveColor
 
             self.parts = []
+            self.state = False
 
         def addPart(self, pos1, pos2):
             #Checking validity of pos1
@@ -142,35 +143,46 @@ def main():
             #When pos2 is valid
             self.parts.append([pos1, pos2])
 
+        def draw(self, surface):
+            #When cable passive
+            if self.state == False:
+                for part in self.parts:
+                    pygame.draw.line(surface, self.passiveColor, part[0], part[1])
+
+            #When cable active
+            elif self.state == True:
+                for part in self.parts:
+                    pygame.draw.line(surface, self.activeColor, part[0], part[1])
+
     class applClass:
-        def __init__(self, screenSize = None):
-            #When screenSize not entered manually
-            if screenSize == None:
-                self.screenSize = (1200, 600)
-
-            #When screenSize entered manually
-            else:
-                #Checking validity of screenSize
-                if type(screenSize) == tuple:
-                    if len(screenSize) == 2:
-                        for val in screenSize:
-                            if type(val) != int:
-                                raise errors.invalidScreenSizeError()
-
-                        if screenSize[0] <= 1356 and screenSize[0] >= 1:
-                            if not (screenSize[1] <= 677 and screenSize[1] >= 1):
-                                raise errors.invalidScreenSizeError()
-                        else:
-                            raise errors.invalidScreenSizeError()
-                    else:
-                        raise errors.invalidScreenSizeError()
-                else:
-                    raise errors.invalidScreenSizeError()
-
-                #When screenSize is valid
-                self.screenSize = screenSize
+        def __init__(self, surface):
+            self.surface = surface
 
             self.cables = []
+
+        def findCable(self, cableId):
+            #Checking validity of cableId
+            if type(cableId) == int:
+                if cableId >= 0:
+                    #When cableId is valid
+                    cableToEdit = None
+                    for cable in self.cables:
+                        if cable.cableId == cableId:
+                            cableToEdit = cable
+                            break
+
+                    #When entered cableId isn't in the self.cables list
+                    if cableToEdit == None:
+                        raise errors.cableIdNotFoundError()
+                    #When entered cableId in the self.cables list
+                    else:
+                        cable = cableToEdit
+                        del(cableToEdit)
+                        return cable
+                else:
+                    raise errors.invalidCableError()
+            else:
+                raise errors.invalidCableIdError()
 
         def addCable(self):
             cableId = 0
@@ -194,26 +206,6 @@ def main():
             del(dynamicCable)
 
         def addCablePart(self, cableId, pos1, pos2):
-            #Checking validity of cableId
-            if type(cableId) == int:
-                if cableId >= 0:
-                    cableToEdit = None
-                    for cable in self.cables:
-                        if cable.cableId == cableId:
-                            cableToEdit = cable
-
-                    #When entered cableId isn't in the self.cables list
-                    if cableToEdit == None:
-                        raise errors.cableIdNotFoundError()
-                    else:
-                        cable = cableToEdit
-                        del(cableToEdit)
-                else:
-                    raise errors.invalidCableError()
-            else:
-                raise errors.invalidCableIdError()
-
-            #When cableId is valid
             #Checking validity of pos1
             if type(pos1) == tuple:
                 if len(pos1) == 2:
@@ -239,19 +231,34 @@ def main():
 
             #When pos2 is valid
             #Adding part to cable
+            cable = self.findCable(cableId)
             cable.parts.append((pos1, pos2))
+
+        def changeState(self, cableId, state: bool):
+            cable = self.findCable(cableId)
+            cable.state = state
+
+        def drawCable(self, cableId):
+            cable = self.findCable(cableId)
+            cable.draw(self.surface)
+
+        def drawAllCables(self):
+            for cable in self.cables:
+                cable.draw(self.surface)
 
         #Main running function
         def run(self):
-            #Defining pygame surface(window)
-            pygame.init()
-            surface = pygame.display.set_mode(self.screenSize)
-            pygame.display.set_caption("LogicSim")
-
             #Defining color class
             color = colorClass()
 
             running = True
+
+            self.addCable()
+            self.addCablePart(0, (10, 20), (30, 40))
+
+            self.addCable()
+            self.addCablePart(1, (50, 60), (70, 80))
+            self.changeState(1, True)
 
             #Main surface loop
             while running:
@@ -263,10 +270,17 @@ def main():
                 #Things to do
                 surface.fill(color.bgColor)
 
+                self.drawAllCables()
+
                 pygame.display.flip()
 
+    #Defining pygame surface(window)
+    pygame.init()
+    surface = pygame.display.set_mode((1200, 600))
+    pygame.display.set_caption("LogicSim")
+
     #Application starter
-    appl = applClass((1200, 600))
+    appl = applClass(surface)
     appl.run()
 
 #Main python starter
